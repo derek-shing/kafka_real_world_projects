@@ -28,6 +28,8 @@ public class TwitterProducer {
 
         BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100);
         Client client = createTwitterClient(msgQueue);
+
+
         client.connect();
 
         while (!client.isDone()) {
@@ -39,7 +41,11 @@ public class TwitterProducer {
                 client.stop();
             }
             System.out.println(msg);
+
+
         }
+
+
         
 
 
@@ -54,25 +60,18 @@ public class TwitterProducer {
         String token = dotenv.get("token");
         String secret = dotenv.get("secret");
 
-        //System.out.println(consumerKey);
-        //System.out.println(consumerSecret);
-        //System.out.println(token);
-        //System.out.println(secret);
-
-
-
 
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
         Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
         // Optional: set up some followings and track terms
         //List<Long> followings = Lists.newArrayList(1234L, 566788L);
-        List<String> terms = Lists.newArrayList("kafka");
+        List<String> terms = Lists.newArrayList("Donald Trump");
         //hosebirdEndpoint.followings(followings);
         hosebirdEndpoint.trackTerms(terms);
-
+        Authentication hosebirdAuth;
+        hosebirdAuth = new OAuth1(consumerKey, consumerSecret, token, secret);
         // These secrets should be read from a config file
-        Authentication hosebirdAuth = new OAuth1(consumerKey, consumerSecret, token, secret);
 
         ClientBuilder builder = new ClientBuilder()
           .name("Hosebird-Client-01")                              // optional: mainly for the logs
@@ -82,8 +81,12 @@ public class TwitterProducer {
           .processor(new StringDelimitedProcessor(msgQueue));
 
         Client hosebirdClient = builder.build();
-        return hosebirdClient;
-        // Attempts to establish a connection.
+
+
+    return hosebirdClient;
+
+            // Attempts to establish a connection.
+
         //hosebirdClient.connect();
 
 
